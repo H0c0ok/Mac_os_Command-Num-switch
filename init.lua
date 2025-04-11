@@ -90,7 +90,7 @@ end
 
 local CurPointer = 2  -- to keep track of current wokspace
 
--- some sort of main function, here we getting alailable spaces and switching betwwen then
+-- some sort of main function, here we getting available spaces and switching between them
 local function switchToSpace(target)
     os.execute("clear")
     local TargetSpace = target + 1
