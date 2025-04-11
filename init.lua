@@ -1,6 +1,6 @@
 local spaces = require("hs.spaces")
 
--- Функция для выполнения AppleScript
+-- Function to run applescripts
 local function runAppleScript(script)
     hs.osascript.applescript(script)
 end
@@ -10,7 +10,7 @@ function sleep(n)
   os.execute("sleep " .. tonumber(n))
 end
 
--- Функция для получения текущего рабочего стола
+-- Function to get current workspace
 local function getCurrentSpace()
     local spaceID = spaces.focusedSpace()
     return spaceID
@@ -40,6 +40,7 @@ local function Split(inputstr, sep)
     return TableToString(t)
 end
 
+-- reutrns table with all available workspaces(1st index used to get lenght of the returned table)
 local function GetWindowNumbers()
     local currentSpace = getCurrentSpace()
     local AllCurrentSpaces = tostring(hs.spaces.allSpaces())
@@ -53,9 +54,7 @@ local function GetWindowNumbers()
     local LenghtNumbers = #numbers
     ArrayNumbers[1] = LenghtNumbers + 1
     local indx = 2
-    --print("--------------------------------------------------")
     for i, v in ipairs(numbers) do
-        -- print("[?] Index: " .. tostring(i + 1) .. ", Value: " .. tostring(v) .. " [?]")
         ArrayNumbers[indx] = v
         indx = indx + 1
     end
@@ -63,9 +62,9 @@ local function GetWindowNumbers()
 end
 
 
--- Функция для перемещения влево
+-- Function to move left
 local function moveLeft()
-    print("[+] Toggling to left [+]")
+    -- print("[+] Toggling to left [+]")
     runAppleScript([[
         tell application "System Events"
 	    key down control
@@ -76,9 +75,9 @@ local function moveLeft()
     ]])
 end
 
--- Функция для перемещения вправо
+-- Function to move right
 local function moveRight()
-    print("[+] Toggling to right [+]")
+    -- print("[+] Toggling to right [+]")
     runAppleScript([[
         tell application "System Events"
 	    key down control
@@ -89,8 +88,9 @@ local function moveRight()
     ]])
 end
 
-local CurPointer = 2
--- Функция для переключения на указанный рабочий стол
+local CurPointer = 2  -- to keep track of current wokspace
+
+-- some sort of main function, here we getting alailable spaces and switching betwwen then
 local function switchToSpace(target)
     os.execute("clear")
     local TargetSpace = target + 1
@@ -104,13 +104,11 @@ local function switchToSpace(target)
     local difference = TargetSpace - CurPointer
 
     if difference > 0 then
-        -- Если целевой рабочий стол правее, двигаемся вправо
         for _ = 1, difference do
             sleep(0.1)
             moveRight()
         end
     elseif difference < 0 then
-        -- Если целевой рабочий стол левее, двигаемся влево
         for _ = 1, math.abs(difference) do
             sleep(0.1)
             moveLeft()
@@ -121,7 +119,7 @@ local function switchToSpace(target)
     CurPointer = TargetSpace
 end
 
--- Привязка горячих клавиш Command+цифра
+-- Binding to Command + num(1-9)
 for i = 1, 9 do
     hs.hotkey.bind({"cmd"}, tostring(i), function()
         switchToSpace(i)
