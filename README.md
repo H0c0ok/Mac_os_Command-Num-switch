@@ -4,4 +4,5 @@ Installation:
 2) Copy init.lua into ~/.hammerspoon/
 3) Reload config.
 4) Done!
+
 Ps: I know it's slow, i don't know how to make it faster, with methods i use in this code.
